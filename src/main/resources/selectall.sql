@@ -1,0 +1,11 @@
+use testdb;
+select * from person;
+select * from band;
+select * from publisher;
+select * from publication;
+select * from is_member;
+select * from skill;
+select * from has_skill;
+select * from tag;
+select * from person_has_tag;
+select * from band_has_tag;

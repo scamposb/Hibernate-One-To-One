@@ -12,6 +12,9 @@
         <mapping class="db.entities.Publisher" />
         <mapping class="db.entities.Person" />
         <mapping class="db.entities.Band" />
+        <mapping class="db.entities.Publication" />
+        <mapping class="db.entities.Skill" />
+        <mapping class="db.entities.Tag" />
 
     </session-factory>
 </hibernate-configuration>

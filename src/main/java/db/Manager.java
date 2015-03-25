@@ -1,9 +1,6 @@
 package db;
 
-import db.entities.Band;
-import db.entities.Person;
-import db.entities.Publisher;
-import org.hibernate.Session;
+import db.entities.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
@@ -25,44 +22,42 @@ public class Manager {
                 .buildServiceRegistry();
         sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-
+        // CREATE PERSON 1
         Publisher pub1 = new Publisher(false);
         Person per1 = new Person("David","foo@bar.com",648701);
-        session.persist(pub1);
-        per1.setId(pub1.getId());
-        per1.setPublisher(pub1);
-        session.save(per1);
-        
-        session.getTransaction().commit();
-        session.close();
+        ManagerHelper.createPerson(sessionFactory,per1,pub1);
 
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-
+        // CREATE PERSON 2
         Publisher pub2 = new Publisher(false);
         Person per2 = new Person("Adrian","herp@derp.com",642535);
-        session.persist(pub2);
-        per2.setId(pub2.getId());
-        per2.setPublisher(pub2);
-        session.save(per2);
-
-        session.getTransaction().commit();
-        session.close();
-
-        session = sessionFactory.openSession();
-        session.beginTransaction();
-
-        Publisher pub3 = new Publisher(true);
-        Band g = new Band("4real");
-        session.persist(pub3);
-        g.setId(pub3.getId());
-        g.setPublisher(pub3);
-        session.save(g);
+        ManagerHelper.createPerson(sessionFactory, per2, pub2);
         
-        session.getTransaction().commit();
-        session.close();
+        // CREATE BAND
+        Publisher pub3 = new Publisher(true);
+        Band band1 = new Band("4real");
+        ManagerHelper.createBand(sessionFactory, band1, pub3);
+        
+        // ADD PERSON 1 TO BAND 1
+        ManagerHelper.addPersonToBand(sessionFactory, per1, band1);
+        
+        // CREATE PUBLICATION 1 FOR PERSON 1 (PUBLISHER 1)
+        Publication publication1 = new Publication(System.currentTimeMillis(),"herp derp");
+        ManagerHelper.addPublicationToPublisher(sessionFactory, pub1, publication1);
+
+        // CREATE PUBLICATION 2 FOR BAND 1 (PUBLISHER 3)
+        Publication publication2 = new Publication(System.currentTimeMillis(),"addSkillToPerson");
+        ManagerHelper.addPublicationToPublisher(sessionFactory, pub3, publication2);
+
+        // ADD PERSON 2 SKILL 1
+        Skill skill1 = new Skill("guitar");
+        ManagerHelper.addSkillToPerson(sessionFactory, per2, skill1);
+        
+        //ADD PERSON 1 TAG 1
+        Tag tag1 = new Tag("zaragoza");
+        ManagerHelper.addTagToPerson(sessionFactory, per1, tag1);
+
+        //ADD BAND 1 TAG 1
+        ManagerHelper.addTagToBand(sessionFactory, band1, tag1);
         
     }
 }

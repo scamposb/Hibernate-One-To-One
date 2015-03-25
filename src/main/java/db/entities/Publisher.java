@@ -6,6 +6,7 @@ package db.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "Publisher")
@@ -18,6 +19,9 @@ public class Publisher implements Serializable{
     
     @Column(name = "Type")
     private boolean type;
+    
+    @OneToMany(mappedBy = "publisher")
+    private Set<Publication> publications;
 
     public Publisher(boolean type) {
         this.type = type;
